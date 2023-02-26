@@ -1,0 +1,8 @@
+services:
+  nginx:
+    image: registry.gitlab.com/sascha-bruetsch/exercise-projekt/project:v1
+    container_name: nginx-server
+    volumes:
+      - ./html:/usr/share/nginx/html
+    ports:
+      - 8000:80
