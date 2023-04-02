@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: deployment
+  namespace: uebungsprojekt
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: deployment
+  template:
+    metadata:
+      labels:
+        app: deployment
+    spec:
+      containers:
+      - name: nginx
+        image: registry.gitlab.com/sascha-bruetsch/exercise-projekt/project:v1
+        ports:
+        - containerPort: 80
+        volumeMounts:
+        - name: html-volume
+          mountPath: /usr/share/nginx/html
+      volumes:
+      - name: html-volume
+        hostPath:
+          path: /home/vmadmin/k8s-uebungsprojekt/html
