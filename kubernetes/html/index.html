@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="de">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hanoi Tower</title>
+  </head>
+  <body>
+    <button onclick="generateTowers()">Generate/Resete Tower of Hanoi</button>
+    <div class="towersDiv"></div>
+    <label>From</label>
+    <input type="number" id="from">
+    <label>To</label>
+    <input type="number" id="to">
+    <button onclick="move()">Do</button>
+  </body>
+</html>
+
+
+<script>
+
+    let mainTower = ["1","2","3"];
+    let secondTower = [".",".","."];
+    let thirdTower = [".",".","."];
+    
+    let towersDiv = document.getElementsByClassName("towersDiv")[0];
+    let mainTowerElement = document.createElement("ul");
+    let secondTowerElement = document.createElement("ul");
+    let thirdTowerElement = document.createElement("ul");
+    mainTowerElement.setAttribute('id', "mainTower");
+    secondTowerElement.setAttribute('id', "secondTower");
+    thirdTowerElement.setAttribute('id', "thirdTower");
+    towersDiv.appendChild(mainTowerElement);
+    towersDiv.appendChild(secondTowerElement);
+    towersDiv.appendChild(thirdTowerElement);
+
+    function generateTowers(){
+
+        mainTower = ["1","2","3"];
+        secondTower = [".",".","."];
+        thirdTower = [".",".","."];
+
+        displayGameBoard();
+    }
+
+    function displayGameBoard(){
+
+        let mainTowerElement = document.getElementById("mainTower");
+        displayTower(mainTower, mainTowerElement);
+
+        let secondTowerElement = document.getElementById("secondTower");
+        displayTower(secondTower, secondTowerElement);
+
+        let thirdTowerElement = document.getElementById("thirdTower");
+        displayTower(thirdTower, thirdTowerElement);
+
+    }
+
+    function displayTower(tower, towerElement){
+        removeAllChildNodes(towerElement);
+
+        for(i = 0; i < tower.length; i++){
+            let layer = document.createElement("li");
+            let dashes = ""
+
+            for(j = 0; j < tower[i]; j++){
+                dashes += "-";
+            }
+            
+            layer.textContent = dashes;
+            towerElement.appendChild(layer);
+        }
+    }
+
+    function move(){
+        let from = document.getElementById("from").value;
+        let to = document.getElementById("to").value;
+
+        let fromTower;
+        let toTower;
+
+        if(from == 1){
+            fromTower = mainTower;
+        }else if(from == 2){
+            fromTower = secondTower;
+        }else if(from == 3){
+            fromTower = thirdTower;
+        }
+
+        if(to == 1){
+            toTower = mainTower;
+        }else if(to == 2){
+            toTower = secondTower;
+        }else if(to == 3){
+            toTower = thirdTower;
+        }
+
+        let fromTowerIndex = findIndexOfHighestLayer(fromTower);
+        let toTowerIndex = findIndexOfHighestLayer(toTower)-1;
+
+        let layerToMove = fromTower[fromTowerIndex];
+
+        console.log("Before:")
+        console.log(fromTower, toTower)
+
+        console.log(fromTowerIndex)
+        console.log(fromTower[fromTowerIndex])
+        console.log(fromTower[fromTowerIndex] == ".")
+
+        if(fromTower[fromTowerIndex] > toTower[toTowerIndex+1] &&  toTower[toTowerIndex+1] != "." || fromTowerIndex == 3){
+            window.alert("Zug nicht möglich")
+            return;
+        }
+
+        fromTower[fromTowerIndex] = ".";
+        toTower[toTowerIndex] = layerToMove;
+        
+        console.log("After:")
+        console.log(fromTower, toTower)
+
+        displayGameBoard();
+    }
+
+    function removeAllChildNodes(parent) {
+    while (parent.firstChild) {
+        parent.removeChild(parent.firstChild);
+        }
+    }
+
+    function findIndexOfHighestLayer(tower){
+        for(i = 0; i < tower.length; i++){
+            if(tower[i] != "."){
+                return i;
+            }
+        }
+        return 3;
+    }
+
+</script>
+
+<style>
+    *{
+        text-align: center;
+        list-style-type: none;
+    }
+
+    .towersDiv{
+        display: flex;
+        align-items: flex-end;
+    }
+</style>
